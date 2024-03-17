@@ -3,11 +3,14 @@ import { MdLightMode,MdOutlineLightMode,MdDarkMode, MdOutlineDarkMode } from "re
 import useNight from "../services/useNight";
 import { useDispatch } from "react-redux";
 import { modeChange } from "../config/userSlice";
-
+import { useLocation } from "react-router-dom";
 
 function NavItems({ cls, opened }) {
+  const location=useLocation();
   const night=useNight();
   const dispatch=useDispatch();
+  const path=location.pathname;
+
   const setNight=()=>{
     dispatch(modeChange());
   }
@@ -21,16 +24,16 @@ function NavItems({ cls, opened }) {
         <div className={cls+" pt-1 mr-0"} onClick={() => setNight(!night)}>
           {night ?<MdOutlineLightMode/> :<MdLightMode/>}
         </div>
-        <NavLink className={cls} to={"/contest"}>
+        <NavLink className={cls+(path=="/contest"?" font-semibold":"")} to={"/contest"}>
           Contest
         </NavLink>
-        <NavLink className={cls} to={"/playground"}>
+        <NavLink className={cls+(path=="/playground"?" font-semibold":"")} to={"/playground"}>
           PlayGround
         </NavLink>
-        <NavLink className={cls} to={"/problems"}>
+        <NavLink className={cls+(path=="/problems"?" font-semibold":"")} to={"/problems"}>
           Problems
         </NavLink>
-        <NavLink className={cls} to={"/Login"}> 
+        <NavLink className={cls+(path=="/Login"?" font-semibold":"")} to={"/Login"}> 
           Login/SignUp
         </NavLink>
       </div>
