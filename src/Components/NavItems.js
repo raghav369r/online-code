@@ -16,7 +16,7 @@ function NavItems({ cls, opened }) {
   }
   return (
     <div
-      className={`z-10 w-[40%] md:block right-0 mt-7 fixed md:relative md:m-0 ${
+      className={`w-[40%] md:block right-0 mt-7 fixed md:relative md:m-0 ${
         opened ? "block" : "hidden"
       }`}
     >
