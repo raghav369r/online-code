@@ -7,7 +7,7 @@ import {
   MdFullscreenExit,
 } from "react-icons/md";
 
-const Problem = ({ output }) => {
+const Problem = ({ output, loading }) => {
   const [expand, setExpand] = useState(false);
   const [fullScreen, setFullscreen] = useState(false);
   const splitRef = useRef(null);
@@ -82,6 +82,7 @@ const Problem = ({ output }) => {
         >
           <div className="flex justify-between p-2 shadow-lg">
             <p>Output</p>
+            {loading && <p>exicuting...</p>}
             {output && output.error!='' && <p className="text-red-900">ERROR</p>} 
             {output && output.stdout!='' && <p className="text-green-700">Code Exicuted</p>}
             <div className="flex ">

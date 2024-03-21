@@ -9,7 +9,7 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
 import { run } from "../services/run/run";
 
-function CodeEditor({ setOutput }) {
+function CodeEditor({ setOutput, setLoading, loading}) {
     const locataion = useLocation();
     const night = useNight();
     const editorRef = useRef(null);
@@ -58,8 +58,10 @@ function CodeEditor({ setOutput }) {
     };
 
     const handleRun = async () => {
+        setLoading(true);
         const code = editorRef?.current?.getValue();
         var output = await run(language, code);
+        setLoading(false);
         setOutput({
             ...output.data,
         });
@@ -90,13 +92,14 @@ function CodeEditor({ setOutput }) {
                     <option value="ruby">Ruby</option>
                     <option value="swift">Swift</option>
                 </select>
-                <button
+                {loading && <p>Running...</p>}
+                {!loading && <button
                     className="px-2 flex align-middle justify-between"
                     onClick={handleRun}
                 >
                     <GrPlayFill className="mt-1 pr-2" />
                     Run
-                </button>
+                </button>}
                 <div className="flex">
                     {!timerexpand && (
                         <MdOutlineTimer
