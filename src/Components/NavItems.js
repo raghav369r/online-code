@@ -20,20 +20,20 @@ function NavItems({ cls, opened }) {
         opened ? "block" : "hidden"
       }`}
     >
-      <div className={(night?"bg-slate-950":"bg-white ")+" gap-3 flex flex-col md:flex-row justify-evenly"}>
-        <div className={cls+" pt-1 mr-0"} onClick={() => setNight(!night)}>
+      <div className={" gap-3 flex flex-col md:flex-row justify-evenly"}>
+        <div className={"my-auto"} onClick={() => setNight(!night)}>
           {night ?<MdOutlineLightMode/> :<MdLightMode/>}
         </div>
-        <NavLink className={cls+(path=="/contest"?" font-semibold":"")} to={"/contest"}>
+        <NavLink className={"p-2 "+(path=="/contest"?" border-b border-black":"")} to={"/contest"}>
           Contest
         </NavLink>
-        <NavLink className={cls+(path=="/playground"?" font-semibold":"")} to={"/playground"}>
+        <NavLink className={"p-2 "+(path=="/playground"?" border-b border-black":"")} to={"/playground"}>
           PlayGround
         </NavLink>
-        <NavLink className={cls+(path=="/problems"?" font-semibold":"")} to={"/problems"}>
+        <NavLink className={"p-2 "+(path=="/problems"?" border-b border-black":"")} to={"/problems"}>
           Problems
         </NavLink>
-        <NavLink className={cls+(path=="/Login"?" font-semibold":"")} to={"/Login"}> 
+        <NavLink className={"p-2 "+(path=="/Login"?" border-b border-black":"")} to={"/Login"}> 
           Login/SignUp
         </NavLink>
       </div>

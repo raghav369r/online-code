@@ -1,0 +1,1148 @@
+problem : https://us-central1-neetcode-dd170.cloudfunctions.net/getProblemMetadataFunction
+
+post {"data": {"problemId": "dynamicArray"}}
+
+response:
+{
+    "result": {
+        "id": "dynamicArray",
+        "tag": "Implement Data Structures",
+        "name": "Design Dynamic Array (Resizable Array)",
+        "description": "Design a Dynamic Array (aka a resizable array) class, such as an `ArrayList` in Java or a `vector` in C++.\n\n\nYour `DynamicArray` class should support the following operations:\n\n\n* `DynamicArray(int capacity)` will initialize an empty array with a capacity of `capacity`, where `capacity > 0`.\n* `int get(int i)` will return the element at index `i`. Assume that index `i` is valid.\n* `void set(int i, int n)` will set the element at index `i` to `n`. Assume that index `i` is valid.\n* `void pushback(int n)` will push the element `n` to the end of the array.\n* `int popback()` will pop and return the element at the end of the array. Assume that the array is non-empty.\n* `void resize()` will double the capacity of the array.\n* `int getSize()` will return the number of elements in the array.\n* `int getCapacity()` will return the capacity of the array.\n\nIf we call `void pushback(int n)` but the array is full, we should resize the array first.\n\n**Example 1:**\n```java\nInput:\n[\"Array\", 1, \"getSize\", \"getCapacity\"]\n\nOutput:\n[null, 0, 1]\n```\n\n**Example 2:**\n```java\nInput:\n[\"Array\", 1, \"pushback\", 1, \"getCapacity\", \"pushback\", 2, \"getCapacity\"]\n\nOutput:\n[null, null, 1, null, 2]\n```\n\n**Example 3:**\n```java\nInput:\n[\"Array\", 1, \"getSize\", \"getCapacity\", \"pushback\", 1, \"getSize\", \"getCapacity\", \"pushback\", 2, \"getSize\", \"getCapacity\", \"get\", 1, \"set\", 1, 3, \"get\", 1, \"popback\", \"getSize\", \"getCapacity\"]\n\nOutput:\n[null, 0, 1, null, 1, 1, null, 2, 2, 2, null, 3, 3, 1, 2]\n```\n\n**Note:**\n* The index `i` provided to `get(int i)` and `set(int i)` is guranteed to be greater than or equal to `0` and less than the number of elements in the array.\n",
+        "difficulty": "Easy",
+        "free": true,
+        "test_case_type": "class",
+        "test_cases": [],
+        "custom_test_cases": [
+            "[\"Array\", 1, \"getSize\", \"getCapacity\"]",
+            "[\"Array\", 1, \"pushback\", 1, \"getCapacity\", \"pushback\", 2, \"getCapacity\"]",
+            "[\"Array\", 1, \"getSize\", \"getCapacity\", \"pushback\", 1, \"getSize\", \"getCapacity\", \"pushback\", 2, \"getSize\", \"getCapacity\", \"get\", 1, \"set\", 1, 3, \"get\", 1, \"popback\", \"getSize\", \"getCapacity\"]"
+        ],
+        "allow_customize": false,
+        "video": "## Prerequisites\n\n* [Data Structures & Algorithms for Beginners - Dynamic Arrays Lesson](https://neetcode.io/courses/dsa-for-beginners/3)\n\n## Video Explanation\n\n<div\nclass=\"video-container\"\nstyle=\"margin-top: 20px; position: relative; overflow: hidden\"\n>\n<iframe\n  class=\"video\"\n  src=\"https://www.youtube.com/embed/xT70mHdAM74\"\n  title=\"Vimeo video player\"\n  frameborder=\"0\"\n  allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\"\n  allowfullscreen\n>\n</iframe>\n</div>\n",
+        "solutions": {
+            "python": "# Dynamic Array implementation\n# Note: Python lists are dynamic arrays by default,\n# but this is an example of what's going on under the hood.\nclass DynamicArray:\n    \n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.length = 0\n        self.arr = [0] * self.capacity\n\n    # Get value at i-th index\n    def get(self, i: int) -> int:\n        return self.arr[i]\n\n    # Set n at i-th index\n    def set(self, i: int, n: int) -> None:\n        self.arr[i] = n\n\n    # Insert n in the last position of the array\n    def pushback(self, n: int) -> None:\n        if self.length == self.capacity:\n            self.resize()\n            \n        # insert at next empty position\n        self.arr[self.length] = n\n        self.length += 1\n\n    # Remove the last element in the array\n    def popback(self) -> int:\n        if self.length > 0:\n            # soft delete the last element\n            self.length -= 1\n        # return the popped element\n        return self.arr[self.length]\n\n    def resize(self) -> None:\n        # Create new array of double capacity\n        self.capacity = 2 * self.capacity\n        new_arr = [0] * self.capacity \n        \n        # Copy elements to new_arr\n        for i in range(self.length):\n            new_arr[i] = self.arr[i]\n        self.arr = new_arr\n\n    def getSize(self) -> int:\n        return self.length\n    \n    def getCapacity(self) -> int:\n        return self.capacity\n",
+            "javascript": "/**\n * Dynamic Array Class\n * Note: JavaScript arrays are dynamic by default,\n * but this class is used to simulate the behavior of a dynamic array.\n */\nclass DynamicArray {\n    /**\n     * @constructor\n     * @param {number} capacity - Initial capacity of the array.\n     */\n    constructor(capacity) {\n        this.capacity = capacity;\n        this.length = 0;\n        this.arr = new Array(this.capacity).fill(0);\n    }\n\n    /**\n     * Get the value at the i-th index.\n     * @param {number} i - The index to get the value from.\n     * @returns {number} - The value at the i-th index.\n     */\n    get(i) {\n        return this.arr[i];\n    }\n\n    /**\n     * Set a value at the i-th index.\n     * @param {number} i - The index to insert the value at.\n     * @param {number} n - The value to insert.\n     * @returns {void}\n     */\n    set(i, n) {\n        this.arr[i] = n;\n    }\n\n    /**\n     * Insert a value in the last position of the array.\n     * @param {number} n - The value to insert.\n     * @returns {void}\n     */\n    pushback(n) {\n        if (this.length === this.capacity) {\n            this.resize();\n        }\n        this.arr[this.length] = n;\n        this.length++;\n    }\n\n    /**\n     * Remove the last element in the array.\n     * @returns {number}\n     */\n    popback() {\n        if (this.length > 0) {\n            // soft delete the last element\n            this.length--;\n        }\n        return this.arr[this.length];\n    }\n\n    /**\n     * Resize the array to double its current capacity.\n     * @returns {void}\n     */\n    resize() {\n        this.capacity *= 2;\n        const newArr = new Array(this.capacity).fill(0);\n        for (let i = 0; i < this.length; i++) {\n            newArr[i] = this.arr[i];\n        }\n        this.arr = newArr;\n    }\n\n    /**\n     * Get the current size of the array.\n     * @returns {number} - The current size.\n     */\n    getSize() {\n        return this.length;\n    }\n\n    /**\n     * Get the current capacity of the array.\n     * @returns {number} - The current capacity.\n     */\n    getCapacity() {\n        return this.capacity;\n    }\n}\n",
+            "cpp": "class DynamicArray {\nprivate:\n    int* arr;\n    int length;\n    int capacity;\n\npublic:\n    // Constructor to initialize the dynamic array\n    DynamicArray(int capacity) : capacity(capacity), length(0) {\n        arr = new int[capacity];\n    }\n\n    // Get value at the i-th index\n    int get(int i) {\n        return arr[i];\n    }\n\n    // Set value n at the i-th index\n    void set(int i, int n) {\n        arr[i] = n;\n    }\n\n    // Insert n in the last position of the array\n    void pushback(int n) {\n        if (length == capacity) {\n            resize();\n        }\n        arr[length] = n;\n        length++;\n    }\n\n    // Remove the last element in the array\n    int popback() {\n        if (length > 0) {\n            // soft delete the last element\n            length--;\n        }\n        return arr[length];\n    }\n\n    // Resize the array\n    void resize() {\n        capacity *= 2;\n        int* newArr = new int[capacity];\n        for (int i = 0; i < length; i++) {\n            newArr[i] = arr[i];\n        }\n        delete[] arr;\n        arr = newArr;\n    }\n\n    // Get the size of the array\n    int getSize() {\n        return length;\n    }\n\n    // Get the capacity of the array\n    int getCapacity() {\n        return capacity;\n    }\n};\n",
+            "java": "class DynamicArray {\n\n    private int[] arr;\n    private int length;\n    private int capacity;\n\n    // Constructor to initialize the dynamic array\n    public DynamicArray(int capacity) {\n        this.capacity = capacity;\n        this.length = 0;\n        this.arr = new int[this.capacity];\n    }\n\n    // Get value at the i-th index\n    public int get(int i) {\n        return arr[i];\n    }\n\n    // Insert value n at the i-th index\n    public void set(int i, int n) {\n        arr[i] = n;\n    }\n\n    // Insert n in the last position of the array\n    public void pushback(int n) {\n        if (length == capacity) {\n            resize();\n        }\n        arr[length] = n;\n        length++;\n    }\n\n    // Remove the last element in the array\n    public int popback() {\n        if (length > 0) {\n            // soft delete the last element\n            length--;\n        }\n        return arr[length];\n    }\n\n    // Resize the array\n    private void resize() {\n        capacity *= 2;\n        int[] newArr = new int[capacity];\n        for (int i = 0; i < length; i++) {\n            newArr[i] = arr[i];\n        }\n        arr = newArr;\n    }\n\n    // Get the size of the array\n    public int getSize() {\n        return length;\n    }\n\n    // Get the capacity of the array\n    public int getCapacity() {\n        return capacity;\n    }\n}\n",
+            "csharp": "public class DynamicArray {\n    \n    private int[] arr;\n    private int length;\n    private int capacity;\n\n    // Constructor to initialize the dynamic array\n    public DynamicArray(int capacity) {\n        this.capacity = capacity;\n        this.length = 0;\n        this.arr = new int[this.capacity];\n    }\n\n    // Get value at the i-th index\n    public int Get(int i) {\n        return arr[i];\n    }\n\n    // Insert value n at the i-th index\n    public void Set(int i, int n) {\n        arr[i] = n;\n    }\n\n    // Insert n in the last position of the array\n    public void PushBack(int n) {\n        if (length == capacity)\n        {\n            Resize();\n        }\n        arr[length] = n;\n        length++;\n    }\n\n    // Remove the last element in the array\n    public int PopBack() {\n        if (length > 0)\n        {\n            // soft delete the last element\n            length--;\n        }\n        return arr[length];\n    }\n\n    // Resize the array\n    private void Resize() {\n        capacity *= 2;\n        int[] newArr = new int[capacity];\n        for (int i = 0; i < length; i++)\n        {\n            newArr[i] = arr[i];\n        }\n        arr = newArr;\n    }\n\n    // Get the size of the array\n    public int GetSize() {\n        return length;\n    }\n\n    // Get the capacity of the array\n    public int GetCapacity() {\n        return capacity;\n    }\n}\n"
+        },
+        "starterCode": {
+            "python": "class DynamicArray:\n    \n    def __init__(self, capacity: int):\n\n\n    def get(self, i: int) -> int:\n\n\n    def set(self, i: int, n: int) -> None:\n\n\n    def pushback(self, n: int) -> None:\n\n\n    def popback(self) -> int:\n \n\n    def resize(self) -> None:\n\n\n    def getSize(self) -> int:\n        \n    \n    def getCapacity(self) -> int:\n",
+            "javascript": "class DynamicArray {\n    /**\n     * @constructor\n     * @param {number} capacity\n     */\n    constructor(capacity) {}\n\n    /**\n     * @param {number} i\n     * @returns {number}\n     */\n    get(i) {}\n\n    /**\n     * @param {number} i\n     * @param {number} n\n     * @returns {void}\n     */\n    set(i, n) {}\n\n    /**\n     * @param {number} n\n     * @returns {void}\n     */\n    pushback(n) {}\n\n    /**\n     * @returns {number}\n     */\n    popback() {}\n\n    /**\n     * @returns {void}\n     */\n    resize() {}\n\n    /**\n     * @returns {number}\n     */\n    getSize() {}\n\n    /**\n     * @returns {number}\n     */\n    getCapacity() {}\n}\n",
+            "cpp": "class DynamicArray {\npublic:\n\n    DynamicArray(int capacity) {\n\n    }\n\n    int get(int i) {\n\n    }\n\n    void set(int i, int n) {\n\n    }\n\n    void pushback(int n) {\n\n    }\n\n    int popback() {\n\n    }\n\n    void resize() {\n\n    }\n\n    int getSize() {\n\n    }\n\n    int getCapacity() {\n\n    }\n};\n",
+            "java": "class DynamicArray {\n\n    public DynamicArray(int capacity) {\n\n    }\n\n    public int get(int i) {\n\n    }\n\n    public void set(int i, int n) {\n\n    }\n\n    public void pushback(int n) {\n\n    }\n\n    public int popback() {\n\n    }\n\n    private void resize() {\n\n    }\n\n    public int getSize() {\n\n    }\n\n    public int getCapacity() {\n\n    }\n}\n",
+            "csharp": "public class DynamicArray {\n    \n    public DynamicArray(int capacity) {\n\n    }\n\n    public int Get(int i) {\n\n    }\n\n    public void Set(int i, int n) {\n\n    }\n\n    public void PushBack(int n) {\n\n    }\n\n    public int PopBack() {\n\n    }\n\n    private void Resize() {\n\n    }\n\n    public int GetSize() {\n\n    }\n\n    public int GetCapacity() {\n\n    }\n}\n"
+        },
+        "submissionCount": 90784,
+        "acceptedCount": 17817
+    }
+}
+
+problem list: https://us-central1-neetcode-dd170.cloudfunctions.net/getProblemListFunction
+
+post : {data: {}}
+
+reponse: 
+{
+    "result": {
+        "dynamicArray": {
+            "id": "dynamicArray",
+            "name": "Design Dynamic Array (Resizable Array)",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "singlyLinkedList": {
+            "id": "singlyLinkedList",
+            "name": "Design Singly Linked List",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "queue": {
+            "id": "queue",
+            "name": "Design Double-ended Queue",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "binarySearchTree": {
+            "id": "binarySearchTree",
+            "name": "Design Binary Search Tree",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "hashTable": {
+            "id": "hashTable",
+            "name": "Design Hash Table",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "heap": {
+            "id": "heap",
+            "name": "Design Heap",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "graph": {
+            "id": "graph",
+            "name": "Design Graph",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "unionFind": {
+            "id": "unionFind",
+            "name": "Design Disjoint Set (Union-Find)",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "segmentTree": {
+            "id": "segmentTree",
+            "name": "Design Segment Tree",
+            "difficulty": "Hard",
+            "free": false,
+            "tag": "Implement Data Structures",
+            "unreleased": null
+        },
+        "insertionSort": {
+            "id": "insertionSort",
+            "name": "Insertion Sort",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Sorting",
+            "unreleased": null
+        },
+        "mergeSort": {
+            "id": "mergeSort",
+            "name": "Merge Sort",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Sorting",
+            "unreleased": null
+        },
+        "quickSort": {
+            "id": "quickSort",
+            "name": "Quick Sort",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Sorting",
+            "unreleased": null
+        },
+        "matrixDFS": {
+            "id": "matrixDFS",
+            "name": "Matrix Depth-First Search",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "matrixBFS": {
+            "id": "matrixBFS",
+            "name": "Matrix Breadth-First Search",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "dijkstra": {
+            "id": "dijkstra",
+            "name": "Dijkstra's Algorithm",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "prim": {
+            "id": "prim",
+            "name": "Prim's Algorithm",
+            "difficulty": "Hard",
+            "free": false,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "kruskal": {
+            "id": "kruskal",
+            "name": "Kruskal's Algorithm",
+            "difficulty": "Hard",
+            "free": false,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "topologicalSort": {
+            "id": "topologicalSort",
+            "name": "Topological Sort",
+            "difficulty": "Hard",
+            "free": false,
+            "tag": "Graphs",
+            "unreleased": null
+        },
+        "zeroOneKnapsack": {
+            "id": "zeroOneKnapsack",
+            "name": "0 / 1 Knapsack",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Dynamic Programming",
+            "unreleased": null
+        },
+        "unboundedKnapsack": {
+            "id": "unboundedKnapsack",
+            "name": "Unbounded Knapsack",
+            "difficulty": "Medium",
+            "free": false,
+            "tag": "Dynamic Programming",
+            "unreleased": null
+        },
+        "factory": {
+            "id": "factory",
+            "name": "Factory Method Pattern",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "singleton": {
+            "id": "singleton",
+            "name": "Singleton Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "builder": {
+            "id": "builder",
+            "name": "Builder Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "prototype": {
+            "id": "prototype",
+            "name": "Prototype Pattern",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "adapter": {
+            "id": "adapter",
+            "name": "Adapter Pattern",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "decorator": {
+            "id": "decorator",
+            "name": "Decorator Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "facade": {
+            "id": "facade",
+            "name": "Facade Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "strategy": {
+            "id": "strategy",
+            "name": "Strategy Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "observer": {
+            "id": "observer",
+            "name": "Observer Pattern",
+            "difficulty": "Easy",
+            "free": false,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "state": {
+            "id": "state",
+            "name": "State Pattern",
+            "difficulty": "Easy",
+            "free": null,
+            "tag": "Design Patterns",
+            "unreleased": null
+        },
+        "duplicate-integer": {
+            "id": "duplicate-integer",
+            "name": "Duplicate Integer",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "string-encode-and-decode": {
+            "id": "string-encode-and-decode",
+            "name": "String Encode and Decode",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "count-connected-components": {
+            "id": "count-connected-components",
+            "name": "Count Connected Components",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "valid-tree": {
+            "id": "valid-tree",
+            "name": "Valid Tree",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "foreign-dictionary": {
+            "id": "foreign-dictionary",
+            "name": "Foreign Dictionary",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "meeting-schedule": {
+            "id": "meeting-schedule",
+            "name": "Meeting Schedule",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "meeting-schedule-ii": {
+            "id": "meeting-schedule-ii",
+            "name": "Meeting Schedule II",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "is-anagram": {
+            "id": "is-anagram",
+            "name": "Is Anagram",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "two-integer-sum": {
+            "id": "two-integer-sum",
+            "name": "Two Integer Sum",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "is-palindrome": {
+            "id": "is-palindrome",
+            "name": "Is Palindrome",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "islands-and-treasure": {
+            "id": "islands-and-treasure",
+            "name": "Islands and Treasure",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "buy-and-sell-crypto": {
+            "id": "buy-and-sell-crypto",
+            "name": "Buy and Sell Crypto",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "validate-parentheses": {
+            "id": "validate-parentheses",
+            "name": "Validate Parentheses",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "find-minimum-in-rotated-sorted-array": {
+            "id": "find-minimum-in-rotated-sorted-array",
+            "name": "Find Minimum in Rotated Sorted Array",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "reverse-a-linked-list": {
+            "id": "reverse-a-linked-list",
+            "name": "Reverse a Linked List",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "invert-a-binary-tree": {
+            "id": "invert-a-binary-tree",
+            "name": "Invert a Binary Tree",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "implement-prefix-tree": {
+            "id": "implement-prefix-tree",
+            "name": "Implement Prefix Tree (Trie)",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "find-median-in-a-data-stream": {
+            "id": "find-median-in-a-data-stream",
+            "name": "Find Median in a Data Stream",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "combination-target-sum": {
+            "id": "combination-target-sum",
+            "name": "Combination Target Sum",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "count-number-of-islands": {
+            "id": "count-number-of-islands",
+            "name": "Count Number of Islands",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "climbing-stairs": {
+            "id": "climbing-stairs",
+            "name": "Climbing Stairs",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "count-paths": {
+            "id": "count-paths",
+            "name": "Count Paths",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "maximum-subarray": {
+            "id": "maximum-subarray",
+            "name": "Maximum Subarray",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "insert-new-interval": {
+            "id": "insert-new-interval",
+            "name": "Insert New Interval",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "rotate-matrix": {
+            "id": "rotate-matrix",
+            "name": "Rotate Matrix",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "number-of-one-bits": {
+            "id": "number-of-one-bits",
+            "name": "Number of 1 Bits",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "products-of-array-discluding-self": {
+            "id": "products-of-array-discluding-self",
+            "name": "Products of Array Discluding Self",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-consecutive-sequence": {
+            "id": "longest-consecutive-sequence",
+            "name": "Longest Consecutive Sequence",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "three-integer-sum": {
+            "id": "three-integer-sum",
+            "name": "Three Integer Sum",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "max-water-container": {
+            "id": "max-water-container",
+            "name": "Max Water Container",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-substring-without-duplicates": {
+            "id": "longest-substring-without-duplicates",
+            "name": "Longest Substring Without Duplicates",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-repeating-substring-with-replacement": {
+            "id": "longest-repeating-substring-with-replacement",
+            "name": "Longest Repeating Substring With Replacement",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "minimum-window-with-characters": {
+            "id": "minimum-window-with-characters",
+            "name": "Minimum Window With Characters",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "find-target-in-rotated-sorted-array": {
+            "id": "find-target-in-rotated-sorted-array",
+            "name": "Find Target in Rotated Sorted Array",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "merge-two-sorted-linked-lists": {
+            "id": "merge-two-sorted-linked-lists",
+            "name": "Merge Two Sorted Linked Lists",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "reorder-linked-list": {
+            "id": "reorder-linked-list",
+            "name": "Reorder Linked List",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "remove-node-from-end-of-linked-list": {
+            "id": "remove-node-from-end-of-linked-list",
+            "name": "Remove Node From End of Linked List",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "linked-list-cycle-detection": {
+            "id": "linked-list-cycle-detection",
+            "name": "Linked List Cycle Detection",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "merge-k-sorted-linked-lists": {
+            "id": "merge-k-sorted-linked-lists",
+            "name": "Merge K Sorted Linked Lists",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "depth-of-binary-tree": {
+            "id": "depth-of-binary-tree",
+            "name": "Depth of Binary Tree",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "same-binary-tree": {
+            "id": "same-binary-tree",
+            "name": "Same Binary Tree",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "subtree-of-a-binary-tree": {
+            "id": "subtree-of-a-binary-tree",
+            "name": "Subtree of a Binary Tree",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "design-word-search-data-structure": {
+            "id": "design-word-search-data-structure",
+            "name": "Design Word Search Data Structure",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "search-for-word": {
+            "id": "search-for-word",
+            "name": "Search for Word",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "search-for-word-ii": {
+            "id": "search-for-word-ii",
+            "name": "Search for Word II",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "clone-graph": {
+            "id": "clone-graph",
+            "name": "Clone Graph",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "pacific-atlantic-water-flow": {
+            "id": "pacific-atlantic-water-flow",
+            "name": "Pacific Atlantic Water Flow",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "course-schedule": {
+            "id": "course-schedule",
+            "name": "Course Schedule",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "house-robber": {
+            "id": "house-robber",
+            "name": "House Robber",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "house-robber-ii": {
+            "id": "house-robber-ii",
+            "name": "House Robber II",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-palindromic-substring": {
+            "id": "longest-palindromic-substring",
+            "name": "Longest Palindromic Substring",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "palindromic-substrings": {
+            "id": "palindromic-substrings",
+            "name": "Palindromic Substrings",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "decode-ways": {
+            "id": "decode-ways",
+            "name": "Decode Ways",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "coin-change": {
+            "id": "coin-change",
+            "name": "Coin Change",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "maximum-product-subarray": {
+            "id": "maximum-product-subarray",
+            "name": "Maximum Product Subarray",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "word-break": {
+            "id": "word-break",
+            "name": "Word Break",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-increasing-subsequence": {
+            "id": "longest-increasing-subsequence",
+            "name": "Longest Increasing Subsequence",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "longest-common-subsequence": {
+            "id": "longest-common-subsequence",
+            "name": "Longest Common Subsequence",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "jump-game": {
+            "id": "jump-game",
+            "name": "Jump Game",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "merge-intervals": {
+            "id": "merge-intervals",
+            "name": "Merge Intervals",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "non-overlapping-intervals": {
+            "id": "non-overlapping-intervals",
+            "name": "Non-overlapping Intervals",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "spiral-matrix": {
+            "id": "spiral-matrix",
+            "name": "Spiral Matrix",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "set-zeroes-in-matrix": {
+            "id": "set-zeroes-in-matrix",
+            "name": "Set Zeroes in Matrix",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "counting-bits": {
+            "id": "counting-bits",
+            "name": "Counting Bits",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "reverse-bits": {
+            "id": "reverse-bits",
+            "name": "Reverse Bits",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "missing-number": {
+            "id": "missing-number",
+            "name": "Missing Number",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "sum-of-two-integers": {
+            "id": "sum-of-two-integers",
+            "name": "Sum of Two Integers",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "top-k-elements-in-list": {
+            "id": "top-k-elements-in-list",
+            "name": "Top K Elements in List",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "anagram-groups": {
+            "id": "anagram-groups",
+            "name": "Anagram Groups",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "lowest-common-ancestor-in-binary-search-tree": {
+            "id": "lowest-common-ancestor-in-binary-search-tree",
+            "name": "Lowest Common Ancestor in Binary Search Tree",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "level-order-traversal-of-binary-tree": {
+            "id": "level-order-traversal-of-binary-tree",
+            "name": "Level Order Traversal of Binary Tree",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "valid-binary-search-tree": {
+            "id": "valid-binary-search-tree",
+            "name": "Valid Binary Search Tree",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "kth-smallest-integer-in-bst": {
+            "id": "kth-smallest-integer-in-bst",
+            "name": "Kth Smallest Integer in BST",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "binary-tree-from-preorder-and-inorder-traversal": {
+            "id": "binary-tree-from-preorder-and-inorder-traversal",
+            "name": "Binary Tree from Preorder and Inorder Traversal",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "binary-tree-maximum-path-sum": {
+            "id": "binary-tree-maximum-path-sum",
+            "name": "Binary Tree Maximum Path Sum",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "serialize-and-deserialize-binary-tree": {
+            "id": "serialize-and-deserialize-binary-tree",
+            "name": "Serialize and Deserialize Binary Tree",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "validSudoku": {
+            "id": "validSudoku",
+            "name": "Valid Sudoku",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "twoSum2InputArrayIsSorted": {
+            "id": "twoSum2InputArrayIsSorted",
+            "name": "Two Sum 2 - Input Array Is Sorted",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "trappingRainWater": {
+            "id": "trappingRainWater",
+            "name": "Trapping Rain Water",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "permutationInString": {
+            "id": "permutationInString",
+            "name": "Permutation In String",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "slidingWindowMaximum": {
+            "id": "slidingWindowMaximum",
+            "name": "Sliding Window Maximum",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "minStack": {
+            "id": "minStack",
+            "name": "Min Stack",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "evaluateReversePolishNotation": {
+            "id": "evaluateReversePolishNotation",
+            "name": "Evaluate Reverse Polish Notation",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "generateParentheses": {
+            "id": "generateParentheses",
+            "name": "Generate Parentheses",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "dailyTemperatures": {
+            "id": "dailyTemperatures",
+            "name": "Daily Temperatures",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "carFleet": {
+            "id": "carFleet",
+            "name": "Car Fleet",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "largestRectangleInHistogram": {
+            "id": "largestRectangleInHistogram",
+            "name": "Largest Rectangle In Histogram",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "binarySearch": {
+            "id": "binarySearch",
+            "name": "Binary Search",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "searchA2DMatrix": {
+            "id": "searchA2DMatrix",
+            "name": "Search a 2D Matrix",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "kokoEatingBananas": {
+            "id": "kokoEatingBananas",
+            "name": "Koko Eating Bananas",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "timeBasedKeyValueStore": {
+            "id": "timeBasedKeyValueStore",
+            "name": "Time Based Key-Value Store",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "medianOfTwoSortedArrays": {
+            "id": "medianOfTwoSortedArrays",
+            "name": "Median of Two Sorted Arrays",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "NeetCode150",
+            "unreleased": true
+        },
+        "gradient-descent": {
+            "id": "gradient-descent",
+            "name": "Gradient Descent",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "linear-regression-forward": {
+            "id": "linear-regression-forward",
+            "name": "Linear Regression (Forward)",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "linear-regression-training": {
+            "id": "linear-regression-training",
+            "name": "Linear Regression (Training)",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "neural-networks": {
+            "id": "neural-networks",
+            "name": "Neural Networks",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null,
+            "quiz": true
+        },
+        "basics-of-pytorch": {
+            "id": "basics-of-pytorch",
+            "name": "Pytorch Basics",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "handwritten-digit-classifier": {
+            "id": "handwritten-digit-classifier",
+            "name": "Digit Classifier",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "pytorch-training": {
+            "id": "pytorch-training",
+            "name": "PyTorch Training",
+            "difficulty": "Easy",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null,
+            "quiz": true
+        },
+        "nlp-intro": {
+            "id": "nlp-intro",
+            "name": "Intro to Natural Language Processing",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "sentiment-analysis": {
+            "id": "sentiment-analysis",
+            "name": "Sentiment Analysis",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "gpt-dataset": {
+            "id": "gpt-dataset",
+            "name": "GPT Dataset",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "self-attention": {
+            "id": "self-attention",
+            "name": "Self Attention",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "multi-headed-self-attention": {
+            "id": "multi-headed-self-attention",
+            "name": "Multi Headed Self Attention",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "transformer-block": {
+            "id": "transformer-block",
+            "name": "Transformer Block",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "code-gpt": {
+            "id": "code-gpt",
+            "name": "Code GPT",
+            "difficulty": "Medium",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        },
+        "make-gpt-talk-back": {
+            "id": "make-gpt-talk-back",
+            "name": "Make GPT Talk Back",
+            "difficulty": "Hard",
+            "free": true,
+            "tag": "Machine Learning",
+            "unreleased": null
+        }
+    }
+}

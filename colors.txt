@@ -77,3 +77,27 @@
 
 
     changedin neetcode
+
+    style={{ overflowWrap: "break-word" }}
+
+
+
+
+
+    <Split
+        ref={splitRef}
+        className="h-[98vh]"
+        direction="vertical"
+        gutterSize={5}
+        sizes={[90, 10]}
+        minSize={0}
+      >
+    </Split>
+
+    import Split from "react-split";
+import {
+  MdExpandLess,
+  MdExpandMore,
+  MdFullscreen,
+  MdFullscreenExit,
+} from "react-icons/md";

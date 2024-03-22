@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { pndata } from "../data/probs";
-import useNight from "../services/useNight";
 import Header from "./Header";
 function ProblemTable() {
-  const night = useNight();
   const navigate = useNavigate();
   const thcls = "p-3 bg-white text-gray-400 font-normal m-0";
   const trcls = "odd:bg-gray-200 p-3 bg-white";
@@ -14,7 +12,7 @@ function ProblemTable() {
   };
 
   return (
-    <div className={night ? "bg-slate-950 " : "bg-white"}>
+    <div className="">
       <Header />
       <div className="md:mx-24">
         <table className="w-full">
