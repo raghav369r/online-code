@@ -16,7 +16,7 @@ function NavItems({ cls, opened }) {
   }
   return (
     <div
-      className={`w-[40%] md:block right-0 mt-7 fixed md:relative md:m-0 ${
+      className={`w-[40%] md:w-auto md:block right-0 mt-7 fixed md:relative md:m-0 ${
         opened ? "block" : "hidden"
       }`}
     >
@@ -24,16 +24,16 @@ function NavItems({ cls, opened }) {
         <div className={"my-auto"} onClick={() => setNight(!night)}>
           {night ?<MdOutlineLightMode/> :<MdLightMode/>}
         </div>
-        <NavLink className={"p-2 "+(path=="/contest"?" border-b border-black":"")} to={"/contest"}>
+        <NavLink className={"p-2 hover:text-black "+(path=="/contest"?" border-b border-black text-black":" text-gray-500")} to={"/contest"}>
           Contest
         </NavLink>
-        <NavLink className={"p-2 "+(path=="/playground"?" border-b border-black":"")} to={"/playground"}>
+        <NavLink className={"p-2 hover:text-black "+(path=="/playground"?" border-b border-black text-black":" text-gray-500")} to={"/playground"}>
           PlayGround
         </NavLink>
-        <NavLink className={"p-2 "+(path=="/problems"?" border-b border-black":"")} to={"/problems"}>
+        <NavLink className={"p-2 hover:text-black "+(path=="/problems"?" border-b border-black text-black":" text-gray-500")} to={"/problems"}>
           Problems
         </NavLink>
-        <NavLink className={"p-2 "+(path=="/Login"?" border-b border-black":"")} to={"/Login"}> 
+        <NavLink className={"p-2 hover:text-black "+(path=="/Login"?" border-b border-black text-black":" text-gray-500")} to={"/Login"}> 
           Login/SignUp
         </NavLink>
       </div>

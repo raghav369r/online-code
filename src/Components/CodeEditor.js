@@ -9,13 +9,14 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
 import { run } from "../services/run/run";
 
-function CodeEditor({ setOutput, setLoading, loading }) {
-  const locataion = useLocation();
-  const night = useNight();
-  const editorRef = useRef(null);
+function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
   const [language, setLanguage] = useState("cpp");
   const [fullScreen, setFullscreen] = useState(false);
   const [timerexpand, setTimerexpand] = useState(false);
+  const [output, setOutput]=useState({});
+  const locataion = useLocation();
+  const night = useNight();
+  const editorRef = useRef(null);
   const path = locataion.pathname;
 
   useEffect(() => {
@@ -54,13 +55,17 @@ function CodeEditor({ setOutput, setLoading, loading }) {
   };
 
   const handleRun = async () => {
-    setLoading(true);
+    // setLoading(true);
+    setPlaygroundLoading && setPlaygroundLoading(true);
     const code = editorRef?.current?.getValue();
-    var output = await run(language, code);
-    setLoading(false);
+    console.log(code);
+    var res = await run(language, code);
+    // setLoading(false);
+    setPlaygroundLoading && setPlaygroundLoading(false);
     setOutput({
-      ...output.data,
+      ...res.data,
     });
+    if(setPlaygroundOutput) setPlaygroundOutput({...res.data});
   };
 
   handleSettimer = () => {
@@ -71,7 +76,7 @@ function CodeEditor({ setOutput, setLoading, loading }) {
     <div
       className={
         (fullScreen ? "absolute top-0 left-0 w-[calc(100%-30px)] " : "") +
-        "m-2 border rounded-xl"
+        "m-2 border rounded-xl overflow-x-hidden"
       }
     >
       <div className="flex mx-2 justify-between">
@@ -114,15 +119,31 @@ function CodeEditor({ setOutput, setLoading, loading }) {
           )}
         </div>
       </div>
-      <div className="h-[90vh]">
+      <div className="">
         <Editor
           width="100%"
-          height="80vh"
+          height="83vh"
           defaultLanguage="cpp"
           defaultValue="// Write your code here"
           onMount={handleEditorDidMount}
           // theme="light-dark"
         />
+        <div className="h-[6%] border-t px-2 flex justify-between">
+          <div className="">
+            <button className="my-2 ">Console</button>
+          </div>
+          <div className="flex gap-3">
+            <button
+              className="my-2 px-4 rounded-md font-semibold text-white bg-gray-400 hover:bg-gray-500"
+              onClick={handleRun}
+            >
+              Run
+            </button>
+            <button className="px-4 my-2 rounded-md font-semibold text-white bg-green-600 hover:bg-green-500">
+              Submit
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
