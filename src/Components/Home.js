@@ -1,10 +1,14 @@
 import Header from "./Header";
 function Home() {
-    return ( 
-        <div>
-            <Header/>
-        </div>
-     );
+  return (
+    <div className="">
+      <Header />
+      <div className="">
+        <h1 className="text-2xl p-2">welcome to codee</h1>
+        <h2 className="text-xl p-2">Come, Code, Practice, Participate, Play</h2>
+      </div>
+    </div>
+  );
 }
 
 export default Home;

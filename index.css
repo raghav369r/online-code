@@ -17,7 +17,7 @@
 }
 
 .gutter {
-    background-color: #eee;
+    background-color: #e9eef3;
     background-repeat: no-repeat;
     background-position: 50%;
 }
@@ -30,8 +30,4 @@
 }
 .gutter.gutter-vertical:hover {
     background: blue;
-}
-#main{
-    margin: 0px;
-    background: rgb(255 255 255/var(--tw-text-opacity));
 }

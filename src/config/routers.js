@@ -8,6 +8,8 @@ import Home from "../Components/Home";
 import Login from "../Components/Login";
 import Signup from "../Components/Signup";
 import CodeEditor from "../Components/CodeEditor";
+import User from "../Components/User";
+import PrivateComponent from "../Components/PrivateRoutes/PrivateComponent";
 
 const router = createBrowserRouter([
     { path: "/", element: <Home />, errorElement: <Error /> },
@@ -18,7 +20,8 @@ const router = createBrowserRouter([
     { path: "/solve-problem", element: <Body /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <Signup /> },
-    {path:"/code", element:<CodeEditor/>}
+    {path:"/code", element:<CodeEditor/>},
+    {path:"/me", element:<PrivateComponent element={User}/>},
 ]);
 
 export default router;

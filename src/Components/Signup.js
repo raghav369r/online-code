@@ -1,18 +1,27 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUser, register } from "../services/auth";
-import axios from "axios";
-import { Auth_Backend } from "../config/constants";
+import { addUser } from "../config/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Signup() {
-  const [error,setError]=useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const name=useRef(null);
-  const email=useRef(null);
-  const pass=useRef(null);
+  const name = useRef(null);
+  const email = useRef(null);
+  const pass = useRef(null);
+  const [loading, setLoading]=useState(false);
+  const dispatch=useDispatch();
 
-  const handleSubmit=async(e)=>{
+  const userinstore = useSelector((store) => store.user.user);
+
+  useEffect(() => {
+    if(userinstore) navigate(-1);
+  },[userinstore]);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (name?.current?.value === "") {
       name.current.focus();
@@ -26,18 +35,31 @@ function Signup() {
       pass.current.focus();
       return;
     }
-    const data={name:name, email:email, password:pass};
-    const err=await register(data);
+    setLoading(true);
+    const data = {
+      name: name.current.value,
+      email: email.current.value,
+      password: pass.current.value,
+    };
+    const err = await register(data);
+    setLoading(false);
     setError(err);
-    console.log(getUser());
-  }
+    if (!err){
+      const user = getUser();
+      dispatch(addUser(user));
+      // navigate(-1); //done automatically as user changes in useEffect  
+    }
+    // navigate(history.location.state?.from || '/');
+  };
 
   return (
     <>
       <Header />
       <div className="flex justify-center h-[90vh] align-middle">
         <form className="my-auto p-4 h-96 flex flex-col bg-gray-200 md:w-1/3 rounded-md">
-          <h1 className="text-2xl mt-5 flex justify-center font-bold">Sign Up</h1>
+          <h1 className="text-2xl mt-5 flex justify-center font-bold">
+            Sign Up
+          </h1>
           <input
             ref={name}
             className="mx-auto p-2 w-2/3 mt-4 border-gray-500"
@@ -59,9 +81,14 @@ function Signup() {
             placeholder="password"
             name="password"
           />
-          <p className="mx-auto mt-2 text-red-600 font-mono">{error}</p>
-          <button className="mt-4 w-2/3 mb-2 mx-auto  text-white p-2 rounded-md bg-dark-bg" onClick={handleSubmit}>
-            Register
+          <p className="mx-auto text-xs mt-2 text-red-600 font-mono">{error}</p>
+          <button
+            className="mt-4 w-2/3 mb-2 mx-auto  text-white p-2 rounded-md bg-dark-bg disabled:cursor-not-allowed disabled:opacity-45" 
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading && "Registering..."}
+            {!loading && "Register"}
           </button>
           <p
             className="my-2 mx-auto hover:cursor-pointer hover:underline"

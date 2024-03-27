@@ -8,18 +8,18 @@ const Header = () => {
   const location = useLocation();
   const path = location.pathname;
   return (
-    <div className={"border-b-2 flex justify-between"}>
+    <div className={"border-b-2 flex justify-between bg-white"}>
       <NavLink
         className={
-          "p-2 text-gray-500 hover:text-black " +
-          (path == "/" ? " border-b border-black text-black" : "")
+          "p-2 hover:text-black " +
+          (path == "/" ? "text-black border-b border-black " : "text-gray-500")
         }
         to={"/"}
       >
         Codee
       </NavLink>
       <div
-        className="cursor-pointer md:hidden"
+        className="cursor-pointer px-2 my-auto md:hidden "
         onClick={() => setOpened(!opened)}
       >
         <MdMenu className="size-5" />

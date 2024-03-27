@@ -5,19 +5,27 @@ import { GrPlayFill } from "react-icons/gr";
 import useNight from "../services/useNight";
 import { MdFullscreen, MdFullscreenExit, MdOutlineTimer } from "react-icons/md";
 import { FaAngleLeft } from "react-icons/fa6";
-
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import { run } from "../services/run/run";
+import Split from "react-split";
 
-function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
+function CodeEditor({
+  setPlaygroundOutput,
+  setPlaygroundLoading,
+  setEditorFullscreen,
+}) {
   const [language, setLanguage] = useState("cpp");
   const [fullScreen, setFullscreen] = useState(false);
   const [timerexpand, setTimerexpand] = useState(false);
-  const [output, setOutput]=useState({});
+  const [output, setOutput] = useState({});
+  const [expand, setExpand] = useState(false);
+  const [loading, setLoading] = useState(false);
   const locataion = useLocation();
   const night = useNight();
   const editorRef = useRef(null);
   const path = locataion.pathname;
+  const splitRef = useRef(null);
 
   useEffect(() => {
     // Get the current editor instance
@@ -35,6 +43,7 @@ function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
       localStorage.setItem(path + "/" + language, code);
     };
   }, []);
+
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
     // editor.setTheme('light-dark');
@@ -55,30 +64,37 @@ function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
   };
 
   const handleRun = async () => {
-    // setLoading(true);
+    setLoading(true);
     setPlaygroundLoading && setPlaygroundLoading(true);
+    if (setPlaygroundOutput) setPlaygroundOutput({ stdout: "", stderr: "" });
     const code = editorRef?.current?.getValue();
-    console.log(code);
     var res = await run(language, code);
-    // setLoading(false);
+    setLoading(false);
     setPlaygroundLoading && setPlaygroundLoading(false);
     setOutput({
       ...res.data,
     });
-    if(setPlaygroundOutput) setPlaygroundOutput({...res.data});
+    handleConsoleExpand(true);
+    if (setPlaygroundOutput) setPlaygroundOutput(res.data);
   };
 
   handleSettimer = () => {
     setTimerexpand(!timerexpand);
   };
 
+  handleConsoleExpand = (full) => {
+    if (full===true) {
+      splitRef.current.split.setSizes([50, 50]);
+      return;
+    }
+    // console.log("sizes ", splitRef?.current?.split?.getSizes());
+    if (!expand) splitRef.current.split.setSizes([50, 50]);
+    else splitRef.current.split.setSizes([100, 0]);
+    setExpand(!expand);
+  };
+
   return (
-    <div
-      className={
-        (fullScreen ? "absolute top-0 left-0 w-[calc(100%-30px)] " : "") +
-        "m-2 border rounded-xl overflow-x-hidden"
-      }
-    >
+    <div className="border rounded-xl overflow-x-hidden h-[92vh] bg-white">
       <div className="flex mx-2 justify-between">
         <select
           className="font-semibold w-24 mb-2 bg-slate-100 duration-300 focus:ring-0"
@@ -111,7 +127,12 @@ function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
             </div>
           )}
         </div>
-        <div className="my-auto" onClick={() => setFullscreen(!fullScreen)}>
+        <div
+          className="my-auto"
+          onClick={() => {
+            setFullscreen(!fullScreen), setEditorFullscreen();
+          }}
+        >
           {fullScreen ? (
             <MdFullscreenExit className="mr-2 w-5 h-5 cursor-pointer" />
           ) : (
@@ -119,30 +140,67 @@ function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
           )}
         </div>
       </div>
-      <div className="">
-        <Editor
-          width="100%"
-          height="83vh"
-          defaultLanguage="cpp"
-          defaultValue="// Write your code here"
-          onMount={handleEditorDidMount}
-          // theme="light-dark"
-        />
-        <div className="h-[6%] border-t px-2 flex justify-between">
-          <div className="">
-            <button className="my-2 ">Console</button>
+      <Split
+        ref={splitRef}
+        className="h-[88%] overflow-y-hidden"
+        direction="vertical"
+        gutterSize={5}
+        minSize={0}
+        sizes={[100, 0]}
+      >
+        <div className="w-full">
+          <Editor
+            width="100%"
+            height="100%"
+            defaultLanguage="cpp"
+            defaultValue="// Write your code here"
+            onMount={handleEditorDidMount}
+            // theme="light-dark"
+          />
+        </div>
+        <div className="">
+          <div className="px-4 flex gap-3 border-b ">
+            <p className="py-1 text-sm">TestCase</p>
+            <p className="py-1 text-sm border-b border-black">Output</p>
           </div>
-          <div className="flex gap-3">
-            <button
-              className="my-2 px-4 rounded-md font-semibold text-white bg-gray-400 hover:bg-gray-500"
-              onClick={handleRun}
-            >
-              Run
-            </button>
-            <button className="px-4 my-2 rounded-md font-semibold text-white bg-green-600 hover:bg-green-500">
-              Submit
-            </button>
+          <div className="m-1 p-1 overflow-scroll h-full" style={{ overflowWrap: "break-word" }}>
+            {output.stdout && (
+              <div className="border rounded-md p-1 border-lime-400">
+                {output.stdout.split("\n").map((ele, ind) => (
+                  <p key={ind}>{ele}</p>
+                ))}
+              </div>
+            )}
+            {output.stderr && (
+              <div className="p-1 rounded-md text-red-500 bg-red-700 bg-opacity-25">
+                {output.stderr.split("\n").map((ele, ind) => (
+                  <p key={ind}>{ele}</p>
+                ))}
+              </div>
+            )}
           </div>
+        </div>
+      </Split>
+      <div className="h-[6%] border-t px-2 flex justify-between">
+          <button className="flex my-auto " onClick={handleConsoleExpand}>
+            Console
+            {expand ? (
+              <MdExpandMore className="m-1" />
+            ) : (
+              <MdExpandLess className="m-1" />
+            )}
+          </button>
+        <div className="flex gap-3">
+          <button
+            className="my-auto px-4 rounded-md font-semibold text-white bg-gray-400 hover:bg-gray-500 disabled:opacity-35 disabled:cursor-not-allowed"
+            onClick={handleRun}
+            disabled={loading}
+          >
+            {loading ? "Running..." : "Run"}
+          </button>
+          <button className="px-4 my-auto rounded-md font-semibold text-white bg-green-600 hover:bg-green-500">
+            Submit
+          </button>
         </div>
       </div>
     </div>
@@ -150,14 +208,3 @@ function CodeEditor({setPlaygroundOutput, setPlaygroundLoading}) {
 }
 
 export default CodeEditor;
-
-// {loading && <p>Running...</p>}
-//                 {!loading && (
-//                     <button
-//                         className="px-2 flex align-middle justify-between"
-//                         onClick={handleRun}
-//                     >
-//                         <GrPlayFill className="mt-1 pr-2" />
-//                         Run
-//                     </button>
-//                 )}

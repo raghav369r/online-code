@@ -1,12 +1,12 @@
 const Problem = () => {
   return (
-    <div className="m-2 h-[96vh] border rounded-xl mb-0 pb-0 overflow-hidden">
-      <div className="font-semibold flex my-2 border-b gap-5">
-        <a className="ml-2 border-b border-black">Question</a>
-        <a>Solution</a>
-        <a>Submissions</a>
+    <div className="h-[92vh] border rounded-xl mb-0 pb-0 bg-white">
+      <div className="font-semibold flex border-b gap-5 h-[7%] ">
+        <a className="ml-2 border-b border-black mt-auto">Question</a>
+        <a className="mt-auto">Solution</a>
+        <a className="mt-auto">Submissions</a>
       </div>
-      <div className="p-4 overflow-y-scroll">
+      <div className="p-4 overflow-y-scroll h-[93%]">
         <h1 className="text-2xl mb-4 font-semibold">
           2402.Meeting-rooms-iii
         </h1>
