@@ -6,3 +6,6 @@ import App from "./src/Components/App";
 const root=ReactDOM.createRoot(document.getElementById("main"));
 
 root.render(<App/>);
+
+// Project Console: https://console.firebase.google.com/project/codee-pract/overview
+// Hosting URL: https://codee-pract.web.app

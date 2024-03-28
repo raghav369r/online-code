@@ -4,3 +4,7 @@ dist
 fetch
 prev.css
 problem.js
+.firebase/
+.firebaserc
+404.html
+firebase.json

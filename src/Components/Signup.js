@@ -56,7 +56,7 @@ function Signup() {
     <>
       <Header />
       <div className="flex justify-center h-[90vh] align-middle">
-        <form className="my-auto p-4 h-96 flex flex-col bg-gray-200 md:w-1/3 rounded-md">
+        <form className="w-full my-auto p-4 h-96 flex flex-col bg-gray-200 md:w-1/3 rounded-md">
           <h1 className="text-2xl mt-5 flex justify-center font-bold">
             Sign Up
           </h1>
