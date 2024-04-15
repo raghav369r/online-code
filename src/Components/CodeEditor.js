@@ -9,6 +9,7 @@ import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import { run } from "../services/run/run";
 import Split from "react-split";
+import { toast } from "react-toastify";
 
 function CodeEditor({
   setPlaygroundOutput,
@@ -22,6 +23,7 @@ function CodeEditor({
   const [expand, setExpand] = useState(false);
   const [loading, setLoading] = useState(false);
   const locataion = useLocation();
+  const [timeTaken, setTimetaken]=useState("");
   const night = useNight();
   const editorRef = useRef(null);
   const path = locataion.pathname;
@@ -38,11 +40,34 @@ function CodeEditor({
   }, [night]);
 
   useEffect(() => {
+    editorRef?.current?.setValue(
+      localStorage.getItem(path + "/" + language) || "//Enter ur code"
+    );
+    // Event listner for saving to local ctrl+S
+    const onKeyDown = (event) => {
+      if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        handleSave();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+
     return () => {
       const code = editorRef?.current?.getValue();
       localStorage.setItem(path + "/" + language, code);
+      localStorage.setItem(path+"/",language);
+      // remove Event listner
+      document.removeEventListener('keydown', onKeyDown);
+
     };
-  }, []);
+  }, [language]);
+
+  const handleSave=()=>{
+    // console.log("lan ", language)
+    const code = editorRef?.current?.getValue();
+    localStorage.setItem(path + "/" + language, code);
+    toast.success("code saved successfully to localstorage ",{position:"top-center", hideProgressBar: true,});
+  }
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -50,25 +75,30 @@ function CodeEditor({
     if (night) monaco.editor.setTheme("vs-dark");
     localStorage.getItem(path + "/" + language) &&
       editorRef.current?.setValue(localStorage.getItem(path + "/" + language));
+    if (localStorage.getItem(path + "/"))
+      handleLanguageChange(null,localStorage.getItem(path + "/"));
   };
 
-  const handleLanguageChange = (e) => {
-    const code = editorRef?.current?.getValue();
-    localStorage.setItem(path + "/" + language, code);
-
-    const lang = e.target.value;
+  const handleLanguageChange = (e, langu) => {
+    // const code = editorRef?.current?.getValue();
+    // localStorage.setItem(path + "/" + language, code);
+    const lang = e?.target?.value || langu;
     monaco.editor.setModelLanguage(editorRef?.current?.getModel(), lang);
     setLanguage(lang);
-    localStorage.getItem(path + "/" + lang) &&
-      editorRef.current?.setValue(localStorage.getItem(path + "/" + lang));
   };
 
   const handleRun = async () => {
     setLoading(true);
+    setOutput("");
+    setTimetaken("");
     setPlaygroundLoading && setPlaygroundLoading(true);
     if (setPlaygroundOutput) setPlaygroundOutput({ stdout: "", stderr: "" });
     const code = editorRef?.current?.getValue();
+    const start=new Date();
     var res = await run(language, code);
+    const time=(new Date()-start)/1000.0;
+    setTimetaken(time.toFixed(1));
+    // console.log(timeTaken);
     setLoading(false);
     setPlaygroundLoading && setPlaygroundLoading(false);
     setOutput({
@@ -83,7 +113,7 @@ function CodeEditor({
   };
 
   handleConsoleExpand = (full) => {
-    if (full===true) {
+    if (full === true) {
       splitRef.current.split.setSizes([50, 50]);
       return;
     }
@@ -142,7 +172,7 @@ function CodeEditor({
       </div>
       <Split
         ref={splitRef}
-        className="h-[88%] overflow-y-hidden"
+        className="h-[calc(100vh-36px-13vh)] overflow-y-hidden"
         direction="vertical"
         gutterSize={5}
         minSize={0}
@@ -163,7 +193,10 @@ function CodeEditor({
             <p className="py-1 text-sm">TestCase</p>
             <p className="py-1 text-sm border-b border-black">Output</p>
           </div>
-          <div className="m-1 p-1 overflow-scroll h-full" style={{ overflowWrap: "break-word" }}>
+          <div
+            className="m-1 p-1 overflow-scroll h-full"
+            style={{ overflowWrap: "break-word" }}
+          >
             {output.stdout && (
               <div className="border rounded-md p-1 border-lime-400">
                 {output.stdout.split("\n").map((ele, ind) => (
@@ -181,15 +214,15 @@ function CodeEditor({
           </div>
         </div>
       </Split>
-      <div className="h-[6%] border-t px-2 flex justify-between">
-          <button className="flex my-auto " onClick={handleConsoleExpand}>
-            Console
-            {expand ? (
-              <MdExpandMore className="m-1" />
-            ) : (
-              <MdExpandLess className="m-1" />
-            )}
-          </button>
+      <div className="h-9 border-t px-2 flex justify-between">
+        <button className="flex my-auto " onClick={handleConsoleExpand}>
+          Console
+          {expand ? (
+            <MdExpandMore className="m-1" />
+          ) : (
+            <MdExpandLess className="m-1" />
+          )}
+        </button>
         <div className="flex gap-3">
           <button
             className="my-auto px-4 rounded-md font-semibold text-white bg-gray-400 hover:bg-gray-500 disabled:opacity-35 disabled:cursor-not-allowed"

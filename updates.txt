@@ -1,0 +1,19 @@
+modified GotoLogin
+
+contest route
+    url
+    no of questions
+    questions
+        problem
+        input
+        output
+        //testcases
+
+added contest, create, join, 
+error handling while making api requests
+adding tostify notifications
+
+code persistance on local storage
+
+language preference persistance for perticular problem on local storage
+added ctrl + s (event listner to save code to local storage)

@@ -39,6 +39,40 @@ const login = async (data) => {
   }
 };
 
+const registerContest = async (data) => {
+  try {
+    const response = await axios.post(Auth_Backend + "/contest/create", data);
+    return response.data;
+  } catch (ex) {
+    console.log(ex);
+    return {
+      error:
+        ex?.response?.data?.message ||
+        ex?.response?.data ||
+        ex?.message ||
+        "cant't connect to server",
+    };
+  }
+};
+
+const getContest = async (data) => {
+  const config = {
+    headers: {
+      "x-auth-token": getJwttoken(),
+    },
+  };
+  try {
+    const response = await axios.get(
+      Auth_Backend+"/contest/join/" + data,
+      config
+    );
+    // console.log(response);
+    return response.data;
+  } catch (ex) {
+    return { error: ex?.response?.data || "Can't connect to server!!" };
+  }
+};
+
 const register = async (data) => {
   const { name, email, password } = data;
   try {
@@ -69,4 +103,6 @@ export {
   logout,
   login,
   register,
+  registerContest,
+  getContest,
 };

@@ -44,7 +44,7 @@ const Problem = ({ output }) => {
         minSize={0}
       >
         <div className="w-full overflow-y-auto">
-          <h1 className="text-4xl m-2 font-sans">2402.Meeting-rooms-iii</h1>
+          <h1 className="text-4xl m-2">2402.Meeting-rooms-iii</h1>
           <p>
             You are given an integer n. There are n rooms numbered from 0 to n -
             1. You are given a 2D integer array meetings where meetings[i] =

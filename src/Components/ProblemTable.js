@@ -28,7 +28,7 @@ function ProblemTable() {
               <tr className={trcls} key={ele.problem_name}>
                 <td className={tdcls}>{!(index % 2) ? "Done" : ""}</td>
                 <td
-                  className={tdcls + " cursor-pointer hover:text-blue-700"}
+                  className={tdcls + " cursor-pointer hover:text-blue-700 line-clamp-1"}
                   onClick={handleClick}
                 > 
                   {index + 1 + ". " + ele.problem_name}

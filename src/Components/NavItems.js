@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { modeChange } from "../config/userSlice";
 import { useLocation } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
+import  {Tooltip}  from "../tooltip/Tooltip";
 
 function NavItems({ opened }) {
   const location = useLocation();
@@ -28,7 +29,9 @@ function NavItems({ opened }) {
     >
       <div className={" gap-3 flex flex-col md:flex-row justify-evenly"}>
         <div className={"my-auto"} onClick={() => setNight(!night)}>
+          <Tooltip text={night?"Light mode":"Dark Mode"}>
           {night ? <MdOutlineLightMode /> : <MdLightMode />}
+          </Tooltip>
         </div>
         <NavLink
           className={

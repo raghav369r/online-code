@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdMenu } from "react-icons/md";
 import NavItems from "./NavItems";
 import { NavLink, useLocation } from "react-router-dom";
+import { Tooltip } from "../tooltip/Tooltip";
 
 const Header = () => {
   const [opened, setOpened] = useState(false);
@@ -16,7 +17,9 @@ const Header = () => {
         }
         to={"/"}
       >
+        <Tooltip>
         Codee
+        </Tooltip>
       </NavLink>
       <div
         className="cursor-pointer px-2 my-auto md:hidden "
