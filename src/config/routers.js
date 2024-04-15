@@ -14,6 +14,7 @@ import ContestJoin from "../Components/contest/join/ContestJoin";
 import Join from "../Components/contest/join/Join";
 import Problems from "../Components/contest/join/Problems";
 import Displaycode from "../Components/Displaycode";
+import { SolveProblem } from "../Components/SolveProblem";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,14 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/Problems", element: <ProblemTable /> },
+      // { path: "/Problems", element: <ProblemTable /> },
+      {
+        path: "/Problems",
+        children: [
+          { path: "", element: <ProblemTable /> },
+          { path: ":problem", element: <SolveProblem /> },
+        ],
+      },
       { path: "/playground", element: <PlayGround /> },
       {
         path: "/contest",

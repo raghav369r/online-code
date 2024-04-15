@@ -5,6 +5,8 @@ const userSlice=createSlice({
     initialState:{
         user:null,
         night_mode:false,
+        problem_page:0,
+        limit:15,
     },
     reducers:{
         modeChange:(store)=>{
@@ -15,10 +17,16 @@ const userSlice=createSlice({
         },
         removeUser:(store)=>{
             store.user=null;
+        },
+        setProblemPage:(store,att)=>{
+            store.problem_page=att.payload;
+        },
+        setLimit:(store,att)=>{
+            store.limit=att.payload;
         }
     }
 
 });
 
-export const {modeChange, addUser, removeUser} = userSlice.actions;
+export const {modeChange, addUser, removeUser, setLimit, setProblemPage} = userSlice.actions;
 export default userSlice.reducer;
