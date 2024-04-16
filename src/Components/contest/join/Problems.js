@@ -33,14 +33,16 @@ const Problem = ({ question }) => {
 };
 
 function Problems({ data }) {
+  const navigate = useNavigate();
   const { questions, name, end, start } = data;
+
   return (
     <div className="md:m-20">
       <Link
         className="my-3 text-gray-400 hover:text-blue-900 flex"
         to={"/contest/join"}
       >
-        <IoCaretBack className="mt-[2px]"/>
+        <IoCaretBack className="mt-[2px]" />
         <h1>Back to Contest</h1>
       </Link>
       <h1 className="text-2xl my-4">{name}</h1>
@@ -58,7 +60,12 @@ function Problems({ data }) {
               key={ind}
               className="flex justify-between border-b border-gray-200 bg-white p-2"
             >
-              <p className="text-blue-800">{ele.title}</p>
+              <p
+                className="text-blue-800 cursor-pointer"
+                onClick={() => navigate(""+ind)}
+              >
+                {ele.title}
+              </p>
               <p className="bg-gray-300 px-2 rounded-xl">3</p>
             </div>
           ))}

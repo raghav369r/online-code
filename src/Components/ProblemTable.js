@@ -23,6 +23,8 @@ function ProblemTable() {
     getdata();
   }, [page, limit]);
 
+  if (problems?.error)
+    return <h1 className="mt-20 text-center">{problems.error}</h1>;
   return (
     <div className="">
       <Header />
@@ -36,6 +38,19 @@ function ProblemTable() {
             </tr>
           </thead>
           <tbody>
+            <tr className={trcls} key="098765">
+              <td className={tdcls}>Done</td>
+              <td
+                className={
+                  tdcls + " cursor-pointer hover:text-blue-700 line-clamp-1"
+                }
+                onClick={() => navigate("/specialP")}
+              >
+                Check for palindrome
+              </td>
+              <td className={tdcls}>easy</td>
+            </tr>
+            
             {problems?.map((ele, index) => (
               <tr className={trcls} key={ele.preview}>
                 <td className={tdcls}>{!(index % 2) ? "Done" : ""}</td>
@@ -45,7 +60,7 @@ function ProblemTable() {
                   }
                   onClick={() => navigate(ele.slug)}
                 >
-                  {limit*page+index+1+ ". " + ele.name}
+                  {limit * page + index + 1 + ". " + ele.name}
                 </td>
                 <td className={tdcls}>{ele.difficulty_name}</td>
               </tr>
@@ -54,7 +69,11 @@ function ProblemTable() {
         </table>
         <div className="flex justify-between m-10">
           <div>
-            <select className="p-3 hover:cursor-pointer"  value={limit} onChange={(e)=>dispatch(setLimit(e.target.value))}>
+            <select
+              className="p-3 hover:cursor-pointer"
+              value={limit}
+              onChange={(e) => dispatch(setLimit(e.target.value))}
+            >
               <option value={10}>10/page</option>
               <option value={15}>15/page</option>
               <option value={25}>25/page</option>
@@ -64,7 +83,7 @@ function ProblemTable() {
           <div className="flex cursor-pointer ">
             <h1
               className="border rounded-l  border-black px-3 py-2 hover:bg-slate-500"
-              onClick={() => page?dispatch(setProblemPage(page - 1)):""}
+              onClick={() => (page ? dispatch(setProblemPage(page - 1)) : "")}
             >
               prev
             </h1>

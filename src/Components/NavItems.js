@@ -69,7 +69,7 @@ function NavItems({ opened }) {
         <NavLink
           className={
             "p-2 hover:text-black " +
-            (path == "/Login"
+            (path == "/Login" || path == "/me"
               ? " border-b border-black text-black"
               : " text-gray-500")
           }

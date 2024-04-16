@@ -26,12 +26,12 @@ function PlayGround() {
             setEditorFullscreen={setEditorFullscreen}
           />
         </div>
-        <div className="bg-white border m-1 ml-0 rounded-xl  overflow-x-scroll h-[92vh]">
-          <div className="flex flex-row border-b-2 h-7 justify-between">
+        <div className="bg-white border m-1 ml-0 rounded-xl  overflow-x-hidden">
+          <div className="font-semibold p-2 flex flex-row border-b-2 h-10 justify-between">
             <p>Output</p>
             {loading && <p>exicuting...</p>}
           </div>
-          <div className="px-4 py-2 overflow-y-scroll">
+          <div className="px-4 py-2 overflow-y-scroll  h-[calc(92vh-42px)]">
             {output?.stdout && (
               <div
                 className="border border-lime-500 rounded-md p-2"

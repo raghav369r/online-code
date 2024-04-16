@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getContest } from "../../../services/auth";
 import Problems from "./Problems";
 import Countdown from "./Countdown";
@@ -8,14 +8,11 @@ import { ContestProblems } from "../../../shimmers/ContestProblems";
 
 function ContestJoin() {
   const [data, setData] = useState({});
-  const location = useLocation();
-  const path = location.pathname;
-  const contest = path.split("/").slice(-1)[0];
   const currdate = new Date();
-
+  const {contestId}=useParams();
   useEffect(() => {
     const getdata = async () => {
-      const data = await getContest(contest);
+      const data = await getContest(contestId);
       setData(data);
     };
     getdata();

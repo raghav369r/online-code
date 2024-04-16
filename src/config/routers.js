@@ -13,8 +13,10 @@ import Create from "../Components/contest/create/Create";
 import ContestJoin from "../Components/contest/join/ContestJoin";
 import Join from "../Components/contest/join/Join";
 import Problems from "../Components/contest/join/Problems";
-import Displaycode from "../Components/Displaycode";
+import Displaycode from "../../extra/Displaycode";
 import { SolveProblem } from "../Components/SolveProblem";
+import { TopProblem } from "../Components/TopProblem/Problem";
+import { Solve } from "../Components/contest/join/Solve";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       // { path: "/Problems", element: <ProblemTable /> },
+      { path: "/specialP", element: <TopProblem /> },
       {
         path: "/Problems",
         children: [
@@ -40,8 +43,17 @@ const router = createBrowserRouter([
             children: [
               { path: "", element: <Join /> },
               {
-                path: ":userId",
-                element: <PrivateComponent element={ContestJoin} />,
+                path: ":contestId",
+                children: [
+                  {
+                    path: "",
+                    element: <PrivateComponent element={ContestJoin} />,
+                  },
+                  {
+                    path:":slug",
+                    element:<PrivateComponent element={Solve}/>
+                  }
+                ],
               },
             ],
           },
