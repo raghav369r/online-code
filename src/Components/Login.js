@@ -41,8 +41,8 @@ function Login() {
       const user = getUser();
       toast.success("Sucsessfully Loggedin!", {
         position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
+        autoClose: 1500,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -52,8 +52,8 @@ function Login() {
     } else {
       toast.error("Error Logging in!", {
         position: "top-center",
-        autoClose: 2500,
-        hideProgressBar: false,
+        autoClose: 1500,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,

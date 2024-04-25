@@ -14,8 +14,8 @@ function User() {
     dispatch(removeUser());
     toast.success("successfully logged out!", {
       position: "top-center",
-      autoClose: 2500,
-      hideProgressBar: false,
+      autoClose: 1500,
+      hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
       progress: undefined,

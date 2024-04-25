@@ -23,7 +23,7 @@ function CodeEditor({
   const [expand, setExpand] = useState(false);
   const [loading, setLoading] = useState(false);
   const locataion = useLocation();
-  const [timeTaken, setTimetaken]=useState("");
+  const [timeTaken, setTimetaken] = useState("");
   const night = useNight();
   const editorRef = useRef(null);
   const path = locataion.pathname;
@@ -45,29 +45,32 @@ function CodeEditor({
     );
     // Event listner for saving to local ctrl+S
     const onKeyDown = (event) => {
-      if (event.ctrlKey && event.key === 's') {
+      if (event.ctrlKey && event.key === "s") {
         event.preventDefault();
         handleSave();
       }
     };
-    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
 
     return () => {
       const code = editorRef?.current?.getValue();
       localStorage.setItem(path + "/" + language, code);
-      localStorage.setItem(path+"/",language);
+      localStorage.setItem(path + "/", language);
       // remove Event listner
-      document.removeEventListener('keydown', onKeyDown);
-
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, [language]);
 
-  const handleSave=()=>{
+  const handleSave = () => {
     // console.log("lan ", language)
     const code = editorRef?.current?.getValue();
     localStorage.setItem(path + "/" + language, code);
-    toast.success("code saved successfully to localstorage ",{position:"top-center", hideProgressBar: true,});
-  }
+    toast.success("code saved successfully to localstorage ", {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: true,
+    });
+  };
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -76,7 +79,7 @@ function CodeEditor({
     localStorage.getItem(path + "/" + language) &&
       editorRef.current?.setValue(localStorage.getItem(path + "/" + language));
     if (localStorage.getItem(path + "/"))
-      handleLanguageChange(null,localStorage.getItem(path + "/"));
+      handleLanguageChange(null, localStorage.getItem(path + "/"));
   };
 
   const handleLanguageChange = (e, langu) => {
@@ -94,9 +97,9 @@ function CodeEditor({
     setPlaygroundLoading && setPlaygroundLoading(true);
     if (setPlaygroundOutput) setPlaygroundOutput({ stdout: "", stderr: "" });
     const code = editorRef?.current?.getValue();
-    const start=new Date();
+    const start = new Date();
     var res = await run(language, code);
-    const time=(new Date()-start)/1000.0;
+    const time = (new Date() - start) / 1000.0;
     setTimetaken(time.toFixed(1));
     // console.log(timeTaken);
     setLoading(false);

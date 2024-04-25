@@ -18,7 +18,7 @@ export const Solve = () => {
       setData(res?.questions[parseInt(slug)]);
     };
     getdata();
-    console.log(data);
+    // console.log(data);
   }, []);
 
   return (

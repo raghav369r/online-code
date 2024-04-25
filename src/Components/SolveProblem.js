@@ -11,7 +11,7 @@ export const SolveProblem = () => {
 
   const getProblemDetails = async () => {
     const data = await getProblemDes(name);
-    console.log("data: ",data)
+    // console.log("data: ",data)
     setProblem(data);
   };
   useEffect(() => {
