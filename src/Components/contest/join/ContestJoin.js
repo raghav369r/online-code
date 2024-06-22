@@ -48,23 +48,3 @@ function ContestJoin() {
 }
 
 export default ContestJoin;
-
-// <div>
-//   <div className="p-36">
-//     <p>{"name :" + data?.name}</p>
-//     <p>{"url :" + data?.url}</p>
-//     {data?.questions?.map((ele, ind) => {
-//       return (
-//         <div key={ind}>
-//           <h1>Problem</h1>
-//           <p>title: {ele?.title}</p>
-//           <p>{ele?.question}</p>
-//           <h1>input</h1>
-//           <p>{ele?.exampleip}</p>
-//           <h1>output</h1>
-//           <p>{ele?.exampleop}</p>
-//         </div>
-//       );
-//     })}
-//   </div>
-// </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getContest } from "../../../services/auth";
 import { MdExpandMore } from "react-icons/md";
@@ -7,11 +7,13 @@ import { TiRefresh } from "react-icons/ti";
 import { FaRegFileCode } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Tooltip } from "../../../tooltip/Tooltip";
+import { run } from "../../../services/run/run";
 
 export const Solve = () => {
   const { contestId, slug } = useParams();
   const [data, setData] = useState("");
   const [language, setLanguage] = useState("cpp");
+  const [output, setOutput] = useState({});
   useEffect(() => {
     const getdata = async () => {
       const res = await getContest(contestId);
@@ -21,8 +23,21 @@ export const Solve = () => {
     // console.log(data);
   }, []);
 
+  const editorRef = useRef(null);
+
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+  const handleRun = async () => {
+    setOutput({ loading: true });
+    const code = editorRef.current.getValue();
+    console.log(code);
+    const res = await run("cpp", code);
+    console.log(res);
+    setOutput(res);
+  };
   return (
-    <div className="md:m-20 ">
+    <div className="container mx-auto ">
       <h1 className="text-3xl font-semibold m-4 ml-0">{data?.title}</h1>
       <p className="m-2">{data.question}</p>
       {data?.exampleip?.map((ele, ind) => (
@@ -49,33 +64,29 @@ export const Solve = () => {
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
         >
-          <option value="cpp" className="flex justify-center">
+          <option
+            value="cpp"
+            className="flex justify-center appearance-none w-full"
+          >
             <h1>C++</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="java">
             <h1>Java</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="c">
             <h1>C</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="python">
             <h1>Python</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="r">
             <h1>R</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="ruby">
             <h1>Ruby</h1>
-            <MdExpandMore />
           </option>
           <option className="flex justify-center" value="swift">
             <h1>Swift</h1>
-            <MdExpandMore />
           </option>
         </select>
         <div className="flex gap-3">
@@ -96,14 +107,27 @@ export const Solve = () => {
           height="80vh"
           defaultLanguage="cpp"
           defaultValue="// Write your code here"
-          // onMount={handleEditorDidMount}
+          onMount={handleEditorDidMount}
           // theme="light-dark"
         />
       </div>
       <div className="flex flex-row-reverse gap-4 m-2">
         <button className="py-1.5 px-8 bg-blue-800 text-white">Submit</button>
-        <button className="py-1.5 px-8 bg-white">Run</button>
+        <button className="py-1.5 px-8 bg-white" onClick={handleRun}>
+          {output.loading ? "Running" : "Run"}
+        </button>
       </div>
+      {output.data && <h1 className="text-3xl mx-10">Output</h1>}
+      {output?.data?.stderr && (
+        <div className="p-4 rounded-lg mx-10 bg-neutral-300">
+          <h1 className="text-red-600">{output.data.stderr}</h1>
+        </div>
+      )}
+      {output?.data?.stdout && (
+        <div className="p-4 rounded-lg m-10 bg-neutral-300">
+          <h1 className="text-green-600">{output.data.stdout}</h1>
+        </div>
+      )}
     </div>
   );
 };

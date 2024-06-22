@@ -50,7 +50,7 @@ function ProblemTable() {
               </td>
               <td className={tdcls}>easy</td>
             </tr>
-            
+
             {problems?.map((ele, index) => (
               <tr className={trcls} key={ele.preview}>
                 <td className={tdcls}>{!(index % 2) ? "Done" : ""}</td>
@@ -80,20 +80,21 @@ function ProblemTable() {
               <option value={50}>50/page</option>
             </select>
           </div>
-          <div className="flex cursor-pointer ">
-            <h1
-              className="border rounded-l  border-black px-3 py-2 hover:bg-slate-500"
+          <div className="flex">
+            <button
+              className="border rounded-l  border-black px-3 py-2 hover:bg-slate-500 disabled:cursor-not-allowed"
               onClick={() => (page ? dispatch(setProblemPage(page - 1)) : "")}
+              disabled={page == 0}
             >
               prev
-            </h1>
+            </button>
             <h1 className="border-y  border-black px-3 py-2">{page + 1}</h1>
-            <h1
+            <button
               className="border rounded-r border-black px-3 py-2 hover:bg-slate-500"
               onClick={() => dispatch(setProblemPage(page + 1))}
             >
               next
-            </h1>
+            </button>
           </div>
         </div>
       </div>
